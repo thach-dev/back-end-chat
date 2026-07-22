@@ -29,10 +29,11 @@ app.post("/", async (req, res) => {
       reply,
     });
   } catch (err) {
-    console.error("Gemini Error:", err);
+    console.error(err);
 
     res.status(500).json({
       error: err.message,
+      full: JSON.stringify(err),
     });
   }
 });
