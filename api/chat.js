@@ -7,9 +7,21 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+app.get("/", (req, res) => {
+  res.json({
+    status: "API Running",
+  });
+});
+
 app.post("/", async (req, res) => {
   try {
     const { message } = req.body;
+
+    if (!message) {
+      return res.status(400).json({
+        error: "Message is required",
+      });
+    }
 
     const reply = await generateReply(message);
 
@@ -17,10 +29,10 @@ app.post("/", async (req, res) => {
       reply,
     });
   } catch (err) {
-    console.log(err);
+    console.error("Gemini Error:", err);
 
     res.status(500).json({
-      error: "Gemini Error",
+      error: err.message,
     });
   }
 });
